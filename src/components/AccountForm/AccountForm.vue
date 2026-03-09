@@ -23,7 +23,7 @@
                 :path="`type`"
             >
                 <NSelect
-                    @change="validateAndSave(account.id)"
+                    @update:value="validateAndSave(account.id)"
                     class="form__field"
                     placeholder="Выберите тип"
                     v-model:value="formValue.type"
@@ -75,23 +75,17 @@
 </template>
 <script setup lang="ts">
 import { NButton, NForm, NFormItem, NInput, NSelect, NPopconfirm } from "naive-ui";
-import type { FormInst, FormRules } from "naive-ui";
-import { ref } from "vue";
-import IconDeleteBig from "../icons/IconDeleteBig.vue";
-import type { AccountType, IAccount } from "../types/account";
-import { useAccountsStore } from "../store/accounts";
+import type { FormInst } from "naive-ui";
+import { ref, computed } from "vue";
+import IconDeleteBig from "../../icons/IconDeleteBig.vue";
+import type { FormModel, IAccount } from "../../types/account";
+import { useAccountsStore } from "../../store/accounts";
+import { createAccountRules } from "./accountValidators";
 
 const formRef = ref<FormInst | null>(null);
 const store = useAccountsStore();
 
 const { account } = defineProps<{ account: IAccount }>();
-
-type FormModel = {
-    label: string;
-    type: AccountType;
-    login: string;
-    password: string | null;
-};
 
 const formValue = ref<FormModel>({
     label: account?.label || "",
@@ -128,45 +122,7 @@ const options = [
     },
 ];
 
-const rules: FormRules = {
-    label: [
-        {
-            max: 100,
-            required: false,
-            trigger: ["blur"],
-        },
-    ],
-    type: [
-        {
-            required: true,
-            message: "Выберите тип",
-            trigger: ["blur", "change"],
-        },
-    ],
-    login: [
-        {
-            max: 100,
-            required: true,
-            message: "",
-            trigger: ["blur"],
-        },
-    ],
-    password: [
-        {
-            max: 100,
-            required: false,
-            validator: (rule, value) => {
-                if (formValue.value.type === "Локальная" && !value) {
-                    return new Error("");
-                }
-                return true;
-            },
-            trigger: ["blur"],
-        },
-    ],
-};
-
-const rulesRef = ref<FormRules>(rules);
+const rulesRef = computed(() => createAccountRules(formValue));
 </script>
 
 <style scoped lang="scss">

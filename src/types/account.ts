@@ -18,3 +18,10 @@ export interface IAccountStored {
     login: string;
     password: string | null;
 }
+
+export type FormModel = {
+    label: string;
+    type: AccountType;
+    login: string;
+    password: string | null;
+};

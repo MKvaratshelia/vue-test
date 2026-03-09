@@ -23,7 +23,7 @@
 </template>
 <script setup lang="ts">
 import { useAccountsStore } from "../store/accounts";
-import AccountForm from "./AccountForm.vue";
+import AccountForm from "./AccountForm/AccountForm.vue";
 const store = useAccountsStore();
 </script>
 
