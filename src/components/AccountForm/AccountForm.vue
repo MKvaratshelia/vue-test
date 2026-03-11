@@ -27,7 +27,7 @@
                     class="form__field"
                     placeholder="Выберите тип"
                     v-model:value="formValue.type"
-                    :options="options"
+                    :options="ACCOUNT_TYPE_OPTIONS"
                 />
             </NFormItem>
             <NFormItem
@@ -44,7 +44,7 @@
             </NFormItem>
             <NFormItem
                 :show-label="false"
-                v-if="formValue.type === 'Локальная'"
+                v-if="formValue.type === AccountType.LOCAL"
                 :path="`password`"
             >
                 <NInput
@@ -61,7 +61,7 @@
             <NPopconfirm
                 positive-text="Удалить"
                 negative-text="Отмена"
-                @positive-click="store.deleteAccount(account.id)"
+                @positive-click="deleteAccount"
             >
                 <template #trigger>
                     <NButton>
@@ -75,62 +75,21 @@
 </template>
 <script setup lang="ts">
 import { NButton, NForm, NFormItem, NInput, NSelect, NPopconfirm } from "naive-ui";
-import type { FormInst } from "naive-ui";
-import { ref, computed } from "vue";
 import IconDeleteBig from "../../icons/IconDeleteBig.vue";
-import type { FormModel, IAccount } from "../../types/account";
-import { useAccountsStore } from "../../store/accounts";
-import { createAccountRules } from "./accountValidators";
-
-const formRef = ref<FormInst | null>(null);
-const store = useAccountsStore();
+import type { IAccount } from "../../types/account";
+import { useAccountForm } from "../../hooks/useAccountForm";
+import { AccountType, ACCOUNT_TYPE_OPTIONS } from "../../constants/account";
 
 const { account } = defineProps<{ account: IAccount }>();
 
-const formValue = ref<FormModel>({
-    label: account?.label || "",
-    type: account?.type || "LDAP",
-    login: account?.login || "",
-    password: account?.password || "",
-});
-
-function validateAndSave(id: string) {
-    if (!formRef.value) return;
-
-    formRef.value.validate((errors) => {
-        if (!errors) {
-            const model = formValue.value;
-            store.updatItem(id, {
-                id: account.id,
-                label: model.label,
-                type: model.type,
-                login: model.login,
-                password: model.type === "LDAP" ? null : model.password,
-            });
-        }
-    });
-}
-
-const options = [
-    {
-        label: "LDAP ",
-        value: "LDAP ",
-    },
-    {
-        label: "Локальная",
-        value: "Локальная",
-    },
-];
-
-const rulesRef = computed(() => createAccountRules(formValue));
+const { formRef, formValue, rulesRef, validateAndSave, deleteAccount } = useAccountForm(account);
 </script>
-
 <style scoped lang="scss">
 .form {
     display: grid;
-    grid-template-columns: 1fr 140px 1fr 1fr 80px;
-    gap: 12px;
-    padding: 12px 16px;
+    grid-template-columns: var(--table-grid-template, 1fr 140px 1fr 1fr 80px);
+    gap: var(--table-gap, 12px);
+    padding: var(--table-padding, 12px 16px);
     align-items: start;
     border-top: 1px solid black;
 }

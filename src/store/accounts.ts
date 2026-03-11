@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import type { IAccount } from "../types/account";
 import { ref, watch } from "vue";
 import { useAccountsStorage } from "../hooks/useAccountsStorage";
+import { AccountType } from "../constants/account";
 
 export const useAccountsStore = defineStore("accounts", () => {
     const storage = useAccountsStorage();
@@ -16,13 +17,12 @@ export const useAccountsStore = defineStore("accounts", () => {
             {
                 id: uuidv4(),
                 label: "",
-                type: "LDAP",
+                type: AccountType.LDAP,
                 login: "",
                 password: null,
             },
         ];
     };
-
     const deleteAccount = (id: string) => {
         items.value = items.value.filter((acc) => acc.id !== id);
     };

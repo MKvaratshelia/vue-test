@@ -35,34 +35,21 @@ const store = useAccountsStore();
     border: 1px solid var(--n-border-color, #e0e0e0);
     border-radius: 8px;
     overflow: hidden;
+
+    --table-grid-template: 1fr 140px 1fr 1fr 80px;
+    --table-gap: 12px;
+    --table-padding: 12px 16px;
 }
 
 .table-header {
     display: grid;
-    grid-template-columns: 1fr 140px 1fr 1fr 80px;
-    gap: 12px;
-    padding: 12px 16px;
+    grid-template-columns: var(--table-grid-template);
+    gap: var(--table-gap);
+    padding: var(--table-padding);
     background: #f7f8fa;
     font-size: 0.875rem;
     font-weight: 500;
     color: #333;
     align-items: center;
-}
-
-.table-row {
-    display: grid;
-    grid-template-columns: 1fr 140px 1fr 1fr 80px;
-    gap: 12px;
-    padding: 12px 16px;
-    align-items: start;
-    border-top: 1px solid black;
-}
-
-.table-row:deep(.n-form-item) {
-    margin-bottom: 0;
-}
-
-.table-row:deep(.n-form-item .n-form-item-blank) {
-    width: 100%;
 }
 </style>
