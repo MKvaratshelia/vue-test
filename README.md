@@ -1,5 +1,50 @@
-# Vue 3 + TypeScript + Vite
+# Учётные записи
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Тестовое задание: SPA на Vue 3 для управления списком учётных записей (логин/пароль) с сохранением в `localStorage`.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## Запуск
+
+```bash
+npm install
+npm run dev
+```
+
+Сборка: `npm run build`
+
+## Функциональность
+
+- Добавление записей кнопкой **+** в шапке (новая строка с типом LDAP по умолчанию).
+- Редактирование в таблице: метка, тип записи, логин, пароль.
+- Удаление строки с подтверждением.
+- Сохранение при потере фокуса поля или смене типа (после валидации).
+- Данные сохраняются в `localStorage` и восстанавливаются при перезагрузке.
+
+### Поля
+
+| Поле | Описание |
+|------|----------|
+| Метка | Необязательно, до 100 символов. Несколько меток — через `;` |
+| Тип | **LDAP** или **Локальная** |
+| Логин | Обязательно, до 100 символов |
+| Пароль | Только для типа «Локальная», обязателен при сохранении |
+
+Для **LDAP** поле пароля скрыто, в хранилище записывается `null`.  
+Метки в UI — строка с разделителем `;`, в `localStorage` — массив `{ text }`.
+
+## Стек
+
+Vue 3, TypeScript, Vite, Pinia, Naive UI, uuid.
+
+## Структура
+
+```
+src/
+├── store/accounts.ts          # состояние и CRUD
+├── hooks/
+│   ├── useAccountsStorage.ts  # load/save в localStorage
+│   └── useAccountForm.ts      # форма строки
+├── components/
+│   ├── Accounts.vue           # таблица
+│   └── AccountForm/           # форма и валидация
+└── types/account.ts           # типы
+```
