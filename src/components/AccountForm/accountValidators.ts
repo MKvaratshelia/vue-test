@@ -33,6 +33,7 @@ export function createAccountRules(formValue: Ref<FormModel>): FormRules {
                 max: 100,
                 required: false,
                 validator: (rule, value) => {
+                    console.log(rule);
                     if (formValue.value.type === AccountType.LOCAL && !value) {
                         return new Error("");
                     }

@@ -83,6 +83,7 @@ import { AccountType, ACCOUNT_TYPE_OPTIONS } from "../../constants/account";
 const { account } = defineProps<{ account: IAccount }>();
 
 const { formRef, formValue, rulesRef, validateAndSave, deleteAccount } = useAccountForm(account);
+void formRef;
 </script>
 <style scoped lang="scss">
 .form {
